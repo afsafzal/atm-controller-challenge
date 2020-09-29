@@ -1,0 +1,17 @@
+language: python
+dist: trusty
+sudo: required
+services:
+- docker
+python:
+- '3.8'
+install:
+- pip install --upgrade .
+script:
+- flake8 atm
+- pytest test
+- coverage run --source=atm -m pytest test
+after_success:
+  - coverage report -m
+notifications:
+  email: false
