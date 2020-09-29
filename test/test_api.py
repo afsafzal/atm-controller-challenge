@@ -9,7 +9,6 @@ def load_atm():
     return ATM(DummyCardReader(), DummyBank())
 
 
-
 def test_insert():
     atm = load_atm()
     res = atm.insert_card()
@@ -22,4 +21,15 @@ def test_insert():
     atm = ATM(BadCardReader(), DummyBank())
     res = atm.insert_card()
     assert res == -2
+    assert not atm.get_card_number()
+
+
+def test_release():
+    atm = load_atm()
+    res = atm.release_card()
+    assert res == None
+
+    atm.insert_card()
+    res = atm.release_card()
+    assert res.number == CARD1.number
     assert not atm.get_card_number()
