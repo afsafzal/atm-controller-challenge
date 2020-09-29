@@ -1,4 +1,4 @@
-# The Controller for a Simple ATM
+# The Controller for a Simple ATM [![Build Status](https://travis-ci.com/afsafzal/atm-controller-challenge.svg?branch=master)](https://travis-ci.com/afsafzal/atm-controller-challenge)
 
 This project describes a simple ATM machine that
 has the capabilities to connect to different bank
@@ -25,7 +25,7 @@ for different failures.
 ### How to install and run
 
 This project requires `Python 3.6` or later. You can create a
-virtual environemnt using `pipenv`:
+virtual environment using `pipenv`:
 ```
 $ pipenv --python 3.8 shell
 ```
@@ -40,7 +40,7 @@ can be executed using `pytest`:
 ```
 $ pytest test
 ```
-You can also check for the formating of the source code:
+You can also check for the formatting of the source code:
 ```
 $ flake8 atm
 ```
@@ -50,5 +50,7 @@ $ coverage run --source=atm -m pytest test
 $ coverage report -m
 ```
 
+### Continuous Integration
 
-### Testing Travis
+This project is integrated with Travis CI to automatically
+build and run tests after every push to the repo.
