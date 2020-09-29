@@ -23,6 +23,7 @@ class Card:
         if value.year == today.year and value.month < today.month:
             raise ValueError("The card is expired")
 
+
 @attr.s(frozen=True)
 class CardReader(ABC):
 

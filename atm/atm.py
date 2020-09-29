@@ -70,7 +70,8 @@ class Session:
             assert self.user
             assert self.account in self.user.accounts
         if self.user:
-            assert self.card != None
+            assert self.card is not None
+
 
 @attr.s
 class ATM:
@@ -170,7 +171,7 @@ class ATM:
 
     def get_balance(self) -> int:
         self._session.validate()
-        
+
         if not self._session.account:
             print("No account selected")
             return -1
@@ -210,7 +211,7 @@ class ATM:
     def withdraw(self, amount: int) -> int:
         self._session.validate()
 
-        if amount <= 0 :
+        if amount <= 0:
             print("Invalid amount")
             return -5
 
@@ -238,11 +239,10 @@ class ATM:
                                              self._session.account,
                                              amount)
                 attempts += 1
-            if not successful:
+            if not success:
                 print("The return of your money was unsuccessful."
                       "Please take the printed receipt to your bank to"
                       "fix your account balance")
             return -3
 
         return 0
-

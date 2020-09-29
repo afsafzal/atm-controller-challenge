@@ -14,6 +14,8 @@ setup(
     python_requires='>=3.6',
     install_requires = [
         'pytest==4.4.0',
+        'flake8==3.8.3',
+        'coverage==5.3',
         'pexpect==4.6.0',
         'attrs==19.1.0',
         'pyyaml==5.1',
