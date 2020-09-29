@@ -114,22 +114,22 @@ class ATM:
 
         return self._session.card.number
 
-    def validate_pin(self, pin: str) -> bool:
+    def validate_pin(self, pin: str) -> int:
         self._session.validate()
 
         if not self._session.card:
             print("No card inserted")
-            return False
+            return -1
         if self._session.user:
             print("User is already logged in")
-            return False
+            return -2
 
         user = self._bank.validate_card(self._session.card, pin)
         if not user:
             print("Invalid PIN")
-            return False
+            return -3
         self._session.user = user
-        return True
+        return 0
 
     def get_all_accounts(self) -> List[Account]:
         self._session.validate()

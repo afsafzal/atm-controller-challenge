@@ -33,3 +33,17 @@ def test_release():
     res = atm.release_card()
     assert res.number == CARD1.number
     assert not atm.get_card_number()
+
+
+def test_validate_pin():
+    atm = load_atm()
+    assert atm.validate_pin('1234') == -1
+    atm.insert_card()
+    assert atm.validate_pin('8888') == -3
+    assert atm.validate_pin('1234') == 0
+    assert atm.validate_pin('1234') == -2
+
+    atm.release_card()
+    assert atm.validate_pin('1234') == -1
+    atm.insert_card()
+    assert atm.validate_pin('1234') == 0
