@@ -86,7 +86,7 @@ class DummyMoneyBin(MoneyBin):
 
     def __init__(self):
         self.max_capacity = 2000
-        self.current_holding = 1000
+        self.current_holding = 800
         super().__init__()
 
     def deposit(self, amount: int):

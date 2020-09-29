@@ -122,3 +122,37 @@ def test_deposit_with_money_bin():
     assert atm.get_balance() == 1000 + amount
 
 
+def test_withdraw():
+    atm = load_atm()
+    amount = 500
+    assert atm.withdraw(amount) == -1
+    atm.insert_card()
+    assert atm.withdraw(amount) == -1
+    atm.validate_pin('1234')
+    assert atm.select_account('0001') == 0
+    assert atm.get_account_id() == '0001'
+    assert atm.get_balance() == 1000
+    assert atm.withdraw(amount) == 0
+    assert atm.get_balance() == 1000 - amount
+    assert atm.withdraw(-10) == -5
+    assert atm.get_balance() == 1000 - amount
+
+
+def test_withdraw_with_money_bin():
+    atm = load_atm_money_bin()
+    amount = 500
+    assert atm.withdraw(amount) == -1
+    atm.insert_card()
+    assert atm.withdraw(amount) == -1
+    atm.validate_pin('1234')
+    assert atm.select_account('0001') == 0
+    assert atm.get_account_id() == '0001'
+    assert atm.get_balance() == 1000
+    assert atm.withdraw(amount) == 0
+    assert atm.get_balance() == 1000 - amount
+    assert atm.withdraw(amount) == -2
+    assert atm.get_balance() == 1000 - amount
+    assert atm.withdraw(-10) == -5
+    assert atm.get_balance() == 1000 - amount
+
+

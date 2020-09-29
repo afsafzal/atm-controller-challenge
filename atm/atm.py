@@ -178,7 +178,7 @@ class ATM:
         return self._bank.get_balance(self._session.user,
                                       self._session.account)
 
-    def deposit(self, amount: int) -> bool:
+    def deposit(self, amount: int) -> int:
         self._session.validate()
 
         if amount <= 0:
@@ -207,23 +207,27 @@ class ATM:
             return -4
         return 0
 
-    def withdraw(self, amount: int) -> bool:
+    def withdraw(self, amount: int) -> int:
         self._session.validate()
+
+        if amount <= 0 :
+            print("Invalid amount")
+            return -5
 
         if not self._session.account:
             print("No account selected")
-            return False
+            return -1
 
         if self._money_bin and not self._money_bin.can_withdraw(amount):
             print("Not enough bills in the ATM.")
-            return False
+            return -2
 
         success = self._bank.withdraw(self._session.user,
                                       self._session.account,
                                       amount)
         if not success:
             print("Withdrawal unsuccessful.")
-            return False
+            return -4
 
         if self._money_bin and not self._money_bin.withdraw(amount):
             print("Something went wrong.")
@@ -238,7 +242,7 @@ class ATM:
                 print("The return of your money was unsuccessful."
                       "Please take the printed receipt to your bank to"
                       "fix your account balance")
-            return False
+            return -3
 
-        return True
+        return 0
 
