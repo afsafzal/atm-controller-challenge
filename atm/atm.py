@@ -1,6 +1,6 @@
 from typing import Optional, List
 import attr
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from .card import Card, CardReader
 from .bank import Bank, User, Account
@@ -67,7 +67,8 @@ class Session:
         has not been tampered with and is valid.
         '''
         if self.account:
-            assert self.account.user == self.user
+            assert self.user
+            assert self.account in self.user.accounts
         if self.user:
             assert self.card != None
 
@@ -90,20 +91,28 @@ class ATM:
         self._session = Session()
         return card
 
-    def insert_card(self):
+    def insert_card(self) -> int:
         self._session.validate()
 
         if self._session.card:
             print("There is a card already in use")
-            return
+            return -1
 
-        assert self._session.user == None
-        
         card = self._card_reader.read_card()
         if card:
             self._session.card = card
+            return 0
         else:
             print("The card is invalid")
+            return -2
+
+    def get_card_number(self) -> str:
+        self._session.validate()
+
+        if not self._session.card:
+            return ""
+
+        return self._session.card.number
 
     def validate_pin(self, pin: str) -> bool:
         self._session.validate()
@@ -140,7 +149,7 @@ class ATM:
 
         account = None
         for acc in self._session.user.accounts:
-            if acc.account_id = account_id:
+            if acc.account_id == account_id:
                 account = acc
                 break
         if not account:
@@ -157,7 +166,8 @@ class ATM:
             print("No account selected")
             return -1
 
-        return self._bank.get_balance(self._session.account)
+        return self._bank.get_balance(self._session.user,
+                                      self._session.account)
 
     def deposit(self, amount: int) -> bool:
         self._session.validate()
@@ -174,7 +184,9 @@ class ATM:
             print("The amount of bills did not match the amount specified.")
             return False
 
-        success = self._bank.deposit(self._session.account, amount)
+        success = self._bank.deposit(self._session.user,
+                                     self._session.account,
+                                     amount)
         if not success:
             print("Deposit unsuccessful. Take back your money.")
             if self._money_bin:
@@ -193,7 +205,9 @@ class ATM:
             print("Not enough bills in the ATM.")
             return False
 
-        success = self._bank.withdraw(self._session.account, amount)
+        success = self._bank.withdraw(self._session.user,
+                                      self._session.account,
+                                      amount)
         if not success:
             print("Withdrawal unsuccessful.")
             return False
@@ -203,12 +217,14 @@ class ATM:
             # We should cancel transaction and return the money
             attempts = 0
             while not success and attempts < 5:
-                success = self._bank.deposit(self._session.account, amount)
+                success = self._bank.deposit(self._session.user,
+                                             self._session.account,
+                                             amount)
                 attempts += 1
             if not successful:
-                print("The return of your money was unsuccessful.
-                       Please take the printed receipt to your bank to
-                       fix your account balance")
+                print("The return of your money was unsuccessful."
+                      "Please take the printed receipt to your bank to"
+                      "fix your account balance")
             return False
 
         return True

@@ -1,12 +1,37 @@
 from typing import Optional, List
 import attr
-from abc import ABC
+from abc import ABC, abstractmethod
 from enum import Enum
 
 from .card import Card
 
 
+class AccountType(Enum):
+    CHECKING = 1
+    SAVING = 2
+
+
 @attr.s(frozen=True)
+class Account:
+
+    account_id = attr.ib(type=str)
+    account_type = attr.ib(type=AccountType)
+
+
+@attr.s(frozen=True)
+class User:
+    '''
+    This class holds the information about the user,
+    provided by the bank. The bank will use the secret_token
+    to make sure the user info is correct.
+    '''
+    name = attr.ib(type=str)
+    user_id = attr.ib(type=str)
+    accounts = attr.ib(type=List[Account])
+    secret_token = attr.ib(type=str)
+
+
+@attr.s
 class Bank(ABC):
     '''
     This class is used to implement
@@ -29,7 +54,7 @@ class Bank(ABC):
         pass
 
     @abstractmethod
-    def get_balance(self, account: Account) -> int:
+    def get_balance(self, user: User, account: Account) -> int:
         '''
         This method will call the bank's API to get balance
         of an account.
@@ -37,7 +62,7 @@ class Bank(ABC):
         pass
 
     @abstractmethod
-    def deposit(self, account: Account, amount: int) -> bool:
+    def deposit(self, user: User, account: Account, amount: int) -> bool:
         '''
         This method will call the bank's API to deposit amount
         dollars to the account. Returns True if successfull.
@@ -45,35 +70,9 @@ class Bank(ABC):
         pass
 
     @abstractmethod
-    def withdraw(self, account: Account, amount: int) -> bool:
+    def withdraw(self, user: User, account: Account, amount: int) -> bool:
         '''
         This method will call the bank's API to withdraw amount
         dollars from the account. Returns True if successfull.
         '''
         pass
-
-
-@attr.s(frozen=True)
-class User:
-    '''
-    This class holds the information about the user,
-    provided by the bank. The bank will use the secret_token
-    to make sure the user info is correct.
-    '''
-    name = attr.ib(type=str)
-    user_id = attr.ib(type=str)
-    accounts = attr.ib(type=List[Account])
-    secret_token = attr.ib(type=str)
-
-
-class AccountType(Enum):
-    CHECKING = 1
-    SAVING = 2
-
-
-@attr.s(frozen=True)
-class Account:
-
-    account_id = attr.ib(type=str)
-    account_type = attr.ib(type=AccountType)
-    user = attr.ib(type=User)

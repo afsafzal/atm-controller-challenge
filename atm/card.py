@@ -1,6 +1,6 @@
 import attr
 from datetime import date
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 @attr.s(frozen=True)
