@@ -47,3 +47,26 @@ def test_validate_pin():
     assert atm.validate_pin('1234') == -1
     atm.insert_card()
     assert atm.validate_pin('1234') == 0
+
+
+def test_get_all_accounts():
+    atm = load_atm()
+    assert atm.get_all_accounts() == []
+    atm.insert_card()
+    assert atm.get_all_accounts() == []
+    atm.validate_pin('1234')
+    assert atm.get_all_accounts() == USER1.accounts
+
+
+def test_select_account():
+    atm = load_atm()
+    assert atm.select_account('0001') == -1
+    atm.insert_card()
+    assert atm.select_account('0001') == -1
+    atm.validate_pin('1234')
+    assert atm.select_account('0003') == -2
+    assert atm.select_account('0001') == 0
+    assert atm.get_account_id() == '0001'
+    assert atm.select_account('0002') == 0
+    assert atm.get_account_id() == '0002'
+

@@ -145,7 +145,7 @@ class ATM:
 
         if not self._session.user:
             print("No user logged in")
-            return False
+            return -1
 
         account = None
         for acc in self._session.user.accounts:
@@ -154,10 +154,19 @@ class ATM:
                 break
         if not account:
             print("The account does not belong to the logged in user")
-            return False
+            return -2
 
         self._session.account = account
-        return True
+        return 0
+
+    def get_account_id(self) -> str:
+        self._session.validate()
+
+        if not self._session.account:
+            print("No account selected")
+            return ''
+
+        return self._session.account.account_id
 
     def get_balance(self) -> int:
         self._session.validate()
