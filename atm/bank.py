@@ -29,10 +29,26 @@ class Bank(ABC):
         pass
 
     @abstractmethod
-    def get_accounts(self, user: User) -> List[Account]:
+    def get_balance(self, account: Account) -> int:
         '''
-        This method will call the bank's API to get a
-        list of accounts associated with a user.
+        This method will call the bank's API to get balance
+        of an account.
+        '''
+        pass
+
+    @abstractmethod
+    def deposit(self, account: Account, amount: int) -> bool:
+        '''
+        This method will call the bank's API to deposit amount
+        dollars to the account. Returns True if successfull.
+        '''
+        pass
+
+    @abstractmethod
+    def withdraw(self, account: Account, amount: int) -> bool:
+        '''
+        This method will call the bank's API to withdraw amount
+        dollars from the account. Returns True if successfull.
         '''
         pass
 
