@@ -1,5 +1,4 @@
 # The Controller for a Simple ATM
-------------
 
 This project describes a simple ATM machine that
 has the capabilities to connect to different bank
@@ -28,7 +27,7 @@ for different failures.
 This project requires `Python 3.6` or later. You can create a
 virtual environemnt using `pipenv`:
 ```
-$ pipenv --python3.8 shell
+$ pipenv --python 3.8 shell
 ```
 
 Then you can simply install the project using:
