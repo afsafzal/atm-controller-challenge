@@ -9,6 +9,10 @@ def load_atm():
     return ATM(DummyCardReader(), DummyBank())
 
 
+def load_atm_money_bin():
+    return ATM(DummyCardReader(), DummyBank(), money_bin=DummyMoneyBin())
+
+
 def test_insert():
     atm = load_atm()
     res = atm.insert_card()
@@ -69,4 +73,52 @@ def test_select_account():
     assert atm.get_account_id() == '0001'
     assert atm.select_account('0002') == 0
     assert atm.get_account_id() == '0002'
+
+
+def test_get_balance():
+    atm = load_atm()
+    assert atm.get_balance() == -1
+    atm.insert_card()
+    assert atm.get_balance() == -1
+    atm.validate_pin('1234')
+    assert atm.select_account('0001') == 0
+    assert atm.get_account_id() == '0001'
+    assert atm.get_balance() == 1000
+
+    assert atm.select_account('0002') == 0
+    assert atm.get_balance() == 500
+
+
+def test_deposit():
+    atm = load_atm()
+    amount = 500
+    assert atm.deposit(amount) == -1
+    atm.insert_card()
+    assert atm.deposit(amount) == -1
+    atm.validate_pin('1234')
+    assert atm.select_account('0001') == 0
+    assert atm.get_account_id() == '0001'
+    assert atm.get_balance() == 1000
+    assert atm.deposit(amount) == 0
+    assert atm.get_balance() == 1000 + amount
+    assert atm.deposit(-10) == -5
+    assert atm.get_balance() == 1000 + amount
+
+
+def test_deposit_with_money_bin():
+    atm = load_atm_money_bin()
+    amount = 500
+    assert atm.deposit(amount) == -1
+    atm.insert_card()
+    assert atm.deposit(amount) == -1
+    atm.validate_pin('1234')
+    assert atm.select_account('0001') == 0
+    assert atm.get_account_id() == '0001'
+    assert atm.get_balance() == 1000
+    assert atm.deposit(2000) == -2
+    assert atm.deposit(amount) == 0
+    assert atm.get_balance() == 1000 + amount
+    assert atm.deposit(-10) == -5
+    assert atm.get_balance() == 1000 + amount
+
 

@@ -43,7 +43,7 @@ class DummyBank(Bank):
             return False
 
         u = self.users[user.user_id]
-        if not accounts.account_id in [a.account_id for a in u.accounts]:
+        if not account.account_id in [a.account_id for a in u.accounts]:
             return False
 
         return True
@@ -81,3 +81,31 @@ class BadCardReader(CardReader):
 
     def read_card(self) -> Card:
         return None
+
+class DummyMoneyBin(MoneyBin):
+
+    def __init__(self):
+        self.max_capacity = 2000
+        self.current_holding = 1000
+        super().__init__()
+
+    def deposit(self, amount: int):
+
+        if amount + self.current_holding <= self.max_capacity:
+            self.current_holding += amount
+            return True
+        return False
+
+    def withdraw(self, amount: int):
+
+        if amount > self.current_holding:
+            return False
+
+        self.current_holding -= amount
+        return True
+
+    def can_withdraw(self, amount: int) -> bool:
+        return amount <= self.current_holding
+
+    def can_deposit(self, amount: int) -> bool:
+        return amount + self.current_holding <= self.max_capacity

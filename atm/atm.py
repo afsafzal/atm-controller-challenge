@@ -181,17 +181,21 @@ class ATM:
     def deposit(self, amount: int) -> bool:
         self._session.validate()
 
+        if amount <= 0:
+            print("Invalid amount")
+            return -5
+
         if not self._session.account:
             print("No account selected")
-            return False
+            return -1
 
         if self._money_bin and not self._money_bin.can_deposit(amount):
             print("Not enough room for the bills in the ATM.")
-            return False
+            return -2
 
         if self._money_bin and not self._money_bin.deposit(amount):
             print("The amount of bills did not match the amount specified.")
-            return False
+            return -3
 
         success = self._bank.deposit(self._session.user,
                                      self._session.account,
@@ -200,8 +204,8 @@ class ATM:
             print("Deposit unsuccessful. Take back your money.")
             if self._money_bin:
                 self._money_bin.withdraw(amount)
-            return False
-        return True
+            return -4
+        return 0
 
     def withdraw(self, amount: int) -> bool:
         self._session.validate()
