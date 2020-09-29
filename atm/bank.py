@@ -46,6 +46,7 @@ class User:
     '''
     name = attr.ib(type=str)
     user_id = attr.ib(type=str)
+    accounts = attr.ib(type=List[Account])
     secret_token = attr.ib(type=str)
 
 

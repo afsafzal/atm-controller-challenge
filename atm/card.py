@@ -1,5 +1,6 @@
 import attr
 from datetime import date
+from abc import ABC
 
 
 @attr.s(frozen=True)
@@ -23,8 +24,9 @@ class Card:
             raise ValueError("The card is expired")
 
 @attr.s(frozen=True)
-class CardReader:
+class CardReader(ABC):
 
+    @abstractmethod
     def read_card(self) -> Card:
         '''
         The card reader should implement this
