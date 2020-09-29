@@ -77,7 +77,7 @@ class ATM:
 
     _card_reader = attr.ib(type=CardReader)
     _bank = attr.ib(type=Bank)
-    _session = attr.ib(type=Session, default=Session())
+    _session = attr.ib(type=Session, default=attr.Factory(Session))
     _money_bin = attr.ib(type=Optional[MoneyBin], default=None)
 
     def release_card(self) -> Optional[Card]:

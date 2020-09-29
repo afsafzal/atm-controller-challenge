@@ -76,3 +76,8 @@ class DummyCardReader(CardReader):
 
     def read_card(self) -> Card:
         return CARD1
+
+class BadCardReader(CardReader):
+
+    def read_card(self) -> Card:
+        return None
