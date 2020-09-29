@@ -1,10 +1,10 @@
 language: python
 dist: trusty
-sudo: required
+os: linux
 services:
 - docker
 python:
-- '3.8'
+- '3.6'
 install:
 - pip install --upgrade .
 script:
