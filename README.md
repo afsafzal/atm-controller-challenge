@@ -47,4 +47,5 @@ $ flake8 atm
 And get the coverage of the tests:
 ```
 $ coverage run --source=atm -m pytest test
+$ coverage report -m
 ```
