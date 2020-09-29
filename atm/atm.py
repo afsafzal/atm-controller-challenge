@@ -51,6 +51,10 @@ class MoneyBin(ABC):
 
 @attr.s
 class Session:
+    '''
+    This class keeps an ongoing session
+    of interaction with the ATM.
+    '''
 
     card = attr.ib(type=Optional[Card], default=None)
     user = attr.ib(type=Optional[User], default=None)
@@ -75,6 +79,11 @@ class Session:
 
 @attr.s
 class ATM:
+    '''
+    The class representing the ATM that consists
+    of a card reader, a connected banking system,
+    a running session, and potentially a money bin.
+    '''
 
     _card_reader = attr.ib(type=CardReader)
     _bank = attr.ib(type=Bank)
@@ -89,6 +98,7 @@ class ATM:
             return None
 
         card = self._session.card
+        # The previous session is over
         self._session = Session()
         return card
 
@@ -104,6 +114,7 @@ class ATM:
             self._session.card = card
             return 0
         else:
+            # The card reader was unable to read the card
             print("The card is invalid")
             return -2
 
@@ -149,6 +160,7 @@ class ATM:
             return -1
 
         account = None
+        # Make sure the given account id belongs to the logged in user
         for acc in self._session.user.accounts:
             if acc.account_id == account_id:
                 account = acc
@@ -190,10 +202,12 @@ class ATM:
             print("No account selected")
             return -1
 
+        # If there's a money bin check if it has enough capacity
         if self._money_bin and not self._money_bin.can_deposit(amount):
             print("Not enough room for the bills in the ATM.")
             return -2
 
+        # If there's a money bin put the money from user to the bin
         if self._money_bin and not self._money_bin.deposit(amount):
             print("The amount of bills did not match the amount specified.")
             return -3
@@ -203,6 +217,7 @@ class ATM:
                                      amount)
         if not success:
             print("Deposit unsuccessful. Take back your money.")
+            # If there's a money bin return the money to the user
             if self._money_bin:
                 self._money_bin.withdraw(amount)
             return -4
@@ -219,6 +234,7 @@ class ATM:
             print("No account selected")
             return -1
 
+        # If there's a money bin make sure it has enought bills
         if self._money_bin and not self._money_bin.can_withdraw(amount):
             print("Not enough bills in the ATM.")
             return -2
@@ -231,6 +247,7 @@ class ATM:
             return -4
 
         if self._money_bin and not self._money_bin.withdraw(amount):
+            # The money is deducted from user's account but money bin failed
             print("Something went wrong.")
             # We should cancel transaction and return the money
             attempts = 0
@@ -240,6 +257,9 @@ class ATM:
                                              amount)
                 attempts += 1
             if not success:
+                # In this case the user should take the evidence/receipt
+                # to later make a dispute, and ask the bank to return
+                # their money.
                 print("The return of your money was unsuccessful."
                       "Please take the printed receipt to your bank to"
                       "fix your account balance")

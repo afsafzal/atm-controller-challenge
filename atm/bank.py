@@ -13,7 +13,10 @@ class AccountType(Enum):
 
 @attr.s(frozen=True)
 class Account:
-
+    '''
+    This class holds information about the accounts,
+    provided by the bank.
+    '''
     account_id = attr.ib(type=str)
     account_type = attr.ib(type=AccountType)
 
@@ -35,7 +38,7 @@ class User:
 class Bank(ABC):
     '''
     This class is used to implement
-    the interface to interace with
+    the interface to interact with
     the bank.
     '''
 

@@ -5,7 +5,10 @@ from abc import ABC, abstractmethod
 
 @attr.s(frozen=True)
 class Card:
-
+    '''
+    This class holds information related
+    to a card, provided by the card reader.
+    '''
     number = attr.ib(type=str)
     cvv = attr.ib(type=str)
     expiration_date = attr.ib(type=date)
@@ -26,6 +29,11 @@ class Card:
 
 @attr.s(frozen=True)
 class CardReader(ABC):
+    '''
+    This class in intended to implement
+    the interface that interacts with the
+    card reader.
+    '''
 
     @abstractmethod
     def read_card(self) -> Card:
